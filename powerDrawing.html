@@ -420,6 +420,7 @@
             .attr("fill", color);
           return markerId;
         }
+
         function drawCabinetspecial(x, y, portColor, num, temp1, line2color) {
           let greenBoxY = y * 100 + 75 - greenRectHeight / 2;
           let greenBoxX =
@@ -725,6 +726,7 @@
                 .attr("stroke", "#9673A6")
                 .attr("fill", "#E1D5E7")
                 .attr("stroke-width", 2);
+              // this code generate the horizontal line and vertical line
 
               if ((currentCabinet < wide * tall, difference > 1)) {
                 count += 1;
@@ -790,17 +792,32 @@
                     (stepY === 1 ? -circleRadius : circleRadius);
 
                   // Calculate variable vertical lengths
-                  let verticalLength = 100 - x * 15; // Adjust vertical length to decrease progressively
+                  let verticalLength = 120 - x * 15; // Adjust vertical length to decrease progressively
 
                   // Add vertical line from circle top to join horizontal line
-                  // svg
-                  //   .append("path")
-                  //   .attr(
-                  //     "d",
-                  //     `M${lineX},${lineY1} V${lineY1 - verticalLength - 2}`
-                  //   ) // Adjust vertical length
-                  //   .attr("stroke", isDotted ? "#000000" : line2color)
-                  //   .attr("stroke-width", 5);
+                  svg
+                    .append("path")
+                    .attr(
+                      "d",
+                      `M${lineX - 15},${lineY1 + 30} V${
+                        lineY1 - verticalLength + 0
+                      }`
+                    )
+                    .attr("stroke", isDotted ? "#000000" : line2color)
+                    .attr("stroke-width", 2);
+
+                  if (doubleLine) {
+                    svg
+                      .append("path")
+                      .attr(
+                        "d",
+                        `M${lineX + 3},${lineY1} V${
+                          lineY1 - verticalLength + 3
+                        }`
+                      )
+                      .attr("stroke", isDotted ? "#000000" : portColor)
+                      .attr("stroke-width", 2);
+                  }
 
                   // Control points for the curve
                   let controlX1 = lineX + 10; // Slightly to the right of the vertical line
@@ -811,21 +828,15 @@
                     .append("path")
                     .attr(
                       "d",
-                      `M${lineX - 1},${lineY1 - verticalLength} Q${controlX1},${
-                        controlY1 + 10
-                      } ${lineX + cabinetWidth * wide},${
+                      `M${lineX - 16},${
                         lineY1 - verticalLength
-                      }`
+                      } Q${controlX1},${controlY1 + 10} ${
+                        lineX + cabinetWidth * wide
+                      },${lineY1 - verticalLength}`
                     )
                     .attr("stroke", isDotted ? "#000000" : line2color)
                     .attr("stroke-width", 2)
-                    .attr("stroke-dasharray", isDotted ? "4, 4" : "")
-                    .attr(
-                      "marker-end",
-                      `url(#arrowhead-${
-                        isDotted ? "dotted-black" : line2color
-                      })`
-                    );
+                    .attr("stroke-dasharray", isDotted ? "4, 4" : "");
 
                   // Right line or arrow with curve
                   if (doubleLine) {
@@ -836,18 +847,12 @@
                         `M${lineX + 4},${
                           lineY1 - verticalLength + 4
                         } Q${controlX1},${controlY1 + 15} ${
-                          lineX + cabinetWidth * wide
-                        },${lineY1 - verticalLength + 8}`
+                          lineX + cabinetWidth * (wide + 8)
+                        },${lineY1 - verticalLength}`
                       )
                       .attr("stroke", isDotted ? "#000000" : portColor)
                       .attr("stroke-width", 2)
-                      .attr("stroke-dasharray", isDotted ? "4, 4" : "")
-                      .attr(
-                        "marker-end",
-                        `url(#arrowhead-${
-                          isDotted ? "dotted-black" : portColor
-                        })`
-                      );
+                      .attr("stroke-dasharray", isDotted ? "4, 4" : "");
                   }
                 }
               }
@@ -915,7 +920,7 @@
         }
         generateMetrics();
       }
-      generateDiagram(6, 7, 5, "1:1", true);
+      generateDiagram(6, 4, 2, "1:1", false);
     </script>
   </body>
 </html>
