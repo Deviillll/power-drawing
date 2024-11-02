@@ -726,14 +726,6 @@
                 .attr("fill", "#E1D5E7")
                 .attr("stroke-width", 2);
 
-              /* svg.append("text")
-                                .attr("x", x * cabinetWidth + 3)
-                                .attr("y", y * 100 + 3)
-                                .attr("fill", "#000000")
-                                .attr("font-size", "10px")
-                                .attr("alignment-baseline", "hanging")
-                                .text(currentCabinet); */
-
               if ((currentCabinet < wide * tall, difference > 1)) {
                 count += 1;
                 overallPortCounter++;
@@ -819,14 +811,14 @@
                     .append("path")
                     .attr(
                       "d",
-                      `M${lineX},${lineY1 - verticalLength} Q${controlX1},${
+                      `M${lineX - 1},${lineY1 - verticalLength} Q${controlX1},${
                         controlY1 + 10
-                      } ${lineX + cabinetWidth * (wide - 1)},${
+                      } ${lineX + cabinetWidth * wide},${
                         lineY1 - verticalLength
                       }`
                     )
                     .attr("stroke", isDotted ? "#000000" : line2color)
-                    .attr("stroke-width", 4)
+                    .attr("stroke-width", 2)
                     .attr("stroke-dasharray", isDotted ? "4, 4" : "")
                     .attr(
                       "marker-end",
@@ -841,11 +833,11 @@
                       .append("path")
                       .attr(
                         "d",
-                        `M${lineX + 3},${lineY1} V${lineY1 - verticalLength} Q${
-                          controlX1 + 3
-                        },${controlY1} ${
-                          lineX + cabinetWidth * (wide - 1) + 3
-                        },${lineY1 - verticalLength}`
+                        `M${lineX + 4},${
+                          lineY1 - verticalLength + 4
+                        } Q${controlX1},${controlY1 + 15} ${
+                          lineX + cabinetWidth * wide
+                        },${lineY1 - verticalLength + 8}`
                       )
                       .attr("stroke", isDotted ? "#000000" : portColor)
                       .attr("stroke-width", 2)
@@ -923,7 +915,7 @@
         }
         generateMetrics();
       }
-      generateDiagram(6, 4, 2, "1:1", false);
+      generateDiagram(6, 7, 5, "1:1", true);
     </script>
   </body>
 </html>
