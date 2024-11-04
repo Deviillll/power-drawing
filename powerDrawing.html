@@ -802,9 +802,9 @@
                     .append("path")
                     .attr(
                       "d",
-                      `M${!ratiocheck2 ? lineX - 35 : lineX - 15},${
+                      `M${!ratiocheck2 ? lineX - 35 : lineX - 15.5},${
                         lineY1 + 30
-                      } V${lineY1 - verticalLength + 0}`
+                      } V${lineY1 - verticalLength + 25}`
                     )
                     .attr("stroke", isDotted ? "#000000" : line2color)
                     .attr("stroke-width", 2);
@@ -816,7 +816,7 @@
                         "d",
                         `M${!ratiocheck2 ? lineX + 32 : lineX + 15},${
                           lineY1 + 25
-                        } V${lineY1 - verticalLength + 4}`
+                        } V${lineY1 - verticalLength + 5}`
                       )
                       .attr("stroke", isDotted ? "#000000" : portColor)
                       .attr("stroke-width", 2);
@@ -824,18 +824,68 @@
 
                   // Control points for the curve
                   let controlX1 = lineX + 10; // Slightly to the right of the vertical line
-                  let controlY1 = lineY1 - verticalLength - 10; // Upward curve
+                  let controlY1 = lineY1 - verticalLength - 10;
 
-                  // Path with a smoother curve and horizontal movement across the entire row
-                  console.log(line2color, "line2color");
-
-                  console.log(previousColor, "previousColor");
+                  // Adjusted starting point to where the vertical line ends
                   if (previousColor !== line2color) {
                     svg
                       .append("path")
                       .attr(
                         "d",
-                        `M${!ratiocheck2 ? lineX - 36 : lineX - 16},${
+                        `M${!ratiocheck2 ? lineX - 35.3 : lineX - 15.2},${
+                          !ratiocheck2
+                            ? lineY1 - verticalLength + 26
+                            : lineY1 - verticalLength + 35
+                        } Q${controlX1 - 30},${controlY1 + 6} ${lineX + 10},${
+                          lineY1 - verticalLength
+                        }`
+                      )
+                      .attr("fill", "none")
+                      .attr("stroke", line2color)
+                      .attr("stroke-width", 2);
+                    // if (doubleLine) {
+                    //   svg
+                    //     .append("path")
+                    //     .attr(
+                    //       "d",
+                    //       `M${!ratiocheck2 ? lineX - 35.3 : lineX - 15.2},${
+                    //         !ratiocheck2
+                    //           ? lineY1 - verticalLength + 26
+                    //           : lineY1 - verticalLength + 35
+                    //       } Q${controlX1 - 30},${controlY1 + 6} ${lineX + 10},${
+                    //         lineY1 - verticalLength
+                    //       }`
+                    //     )
+                    //     .attr("fill", "none")
+                    //     .attr("stroke", line2color)
+                    //     .attr("stroke-width", 2);
+                    // }
+                  } else {
+                    svg
+                      .append("path")
+                      .attr(
+                        "d",
+                        `M${!ratiocheck2 ? lineX - 35.5 : lineX - 15.2},${
+                          !ratiocheck2
+                            ? lineY1 - verticalLength + 26
+                            : lineY1 - verticalLength + 30
+                        } Q${!ratiocheck2 ? controlX1 - 40 : controlX1 - 28},${
+                          controlY1 + 16
+                        } ${lineX},${lineY1 - verticalLength}`
+                      )
+                      .attr("fill", "none")
+                      .attr("stroke", line2color)
+                      .attr("stroke-width", 2);
+                  }
+
+                  //  horizontal movement across the entire row
+
+                  if (previousColor !== line2color) {
+                    svg
+                      .append("path")
+                      .attr(
+                        "d",
+                        `M${!ratiocheck2 ? lineX : lineX},${
                           lineY1 - verticalLength
                         } Q${controlX1},${controlY1 + 10} ${
                           lineX + cabinetWidth * wide
@@ -866,9 +916,9 @@
                       .append("path")
                       .attr(
                         "d",
-                        `M${!ratiocheck2 ? lineX - 36 : lineX - 15},${
+                        `M${!ratiocheck2 ? lineX - 0 : lineX},${
                           lineY1 - verticalLength
-                        } Q${controlX1 - 25},${controlY1 + 8} ${
+                        } Q${controlX1},${controlY1 + 8} ${
                           lineX + (cabinetWidth * wide) / 12
                         },${lineY1 - verticalLength - 15}` // Adjusted control points for smoother curve
                       )
@@ -894,8 +944,8 @@
                     }
                   }
                 }
+                previousColor = line2color;
               }
-              previousColor = line2color;
 
               if (difference === 1) {
                 let y = 0;
@@ -962,7 +1012,7 @@
         }
         generateMetrics();
       }
-      generateDiagram(6, 4, 8, "1:1", false);
+      generateDiagram(6, 4, 4, "1:1", false);
     </script>
   </body>
 </html>
