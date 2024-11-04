@@ -803,7 +803,7 @@
                     .attr(
                       "d",
                       `M${!ratiocheck2 ? lineX - 35 : lineX - 15.5},${
-                        lineY1 + 30
+                        lineY1 + 28
                       } V${lineY1 - verticalLength + 25}`
                     )
                     .attr("stroke", isDotted ? "#000000" : line2color)
@@ -835,7 +835,7 @@
                         `M${!ratiocheck2 ? lineX - 35.3 : lineX - 15.2},${
                           !ratiocheck2
                             ? lineY1 - verticalLength + 26
-                            : lineY1 - verticalLength + 35
+                            : lineY1 - verticalLength + 30
                         } Q${controlX1 - 30},${controlY1 + 6} ${lineX + 10},${
                           lineY1 - verticalLength
                         }`
@@ -1012,7 +1012,7 @@
         }
         generateMetrics();
       }
-      generateDiagram(6, 4, 4, "1:1", false);
+      generateDiagram(10, 5, 4, "1:1", false);
     </script>
   </body>
 </html>
