@@ -104,6 +104,7 @@
         // Calculate cabinet width based on the aspect ratio
         let boxsizecheck = aspectRatio === "16:9";
         let previousColor;
+
         let [aspectWidth, aspectHeight] = aspectRatio.split(":").map(Number);
         let cabinetWidth = (100 * aspectWidth) / aspectHeight;
         console.log(boxsizecheck, "cabinetWidth");
@@ -421,6 +422,7 @@
             .attr("fill", color);
           return markerId;
         }
+        let previousColor2 = null;
 
         function drawCabinetspecial(x, y, portColor, num, temp1, line2color) {
           let greenBoxY = y * 100 + 75 - greenRectHeight / 2;
@@ -433,6 +435,12 @@
           let endY = y * 100 + 50 + greenRectHeight / 2 + 5;
           let controlX = (startX + endX) / 2 + 4;
           let controlY = startY / 2 + endY / 2 + 4;
+
+          // Adjust the control points to create a smoother curve
+          let verticalLength = 60 - x * 5; // Adjust vertical length to decrease more
+          let controlX1 = startX + 8; // Slightly to the right of the vertical line
+          let controlY1 = startY - verticalLength - 5; // Upward curve
+
           if (aspectRatio === "16:9") {
             endX1 = endX + cabinetWidth / 2 + greenRectWidth + 12;
           } else {
@@ -440,7 +448,8 @@
           }
           let startX1 = startX;
           let startY1 = startY;
-          //top boxes rectangle
+
+          // Draw top boxes
           if (num === 1 || num === 2) {
             svg
               .append("rect")
@@ -466,8 +475,8 @@
                 .attr("stroke", line2color);
             }
           }
-          // its top row arrow
-          //here curve btw arrowhead and horizon
+
+          // Draw curves and arrows
           if (aspectRatio === "1:1" || aspectRatio === "8:9") {
             const markerId = createArrowheadMarker(svg, portColor);
             svg
@@ -497,11 +506,12 @@
               .attr("stroke-width", 2)
               .attr("marker-end", `url(#${markerId})`);
           }
-          // second arrow
+
+          // Second arrow if doubleLine
           if (doubleLine) {
+            const markerIdX = createArrowheadMarker(svg, line2color);
             if (num === 1 || num === 2) {
               if (aspectRatio === "1:1" || aspectRatio === "8:9") {
-                const markerIdX = createArrowheadMarker(svg, line2color);
                 svg
                   .append("path")
                   .attr(
@@ -515,7 +525,6 @@
                   .attr("stroke-width", 2)
                   .attr("marker-end", `url(#${markerIdX})`);
               } else {
-                const markerIdX = createArrowheadMarker(svg, line2color);
                 svg
                   .append("path")
                   .attr(
@@ -530,9 +539,7 @@
                   .attr("marker-end", `url(#${markerIdX})`);
               }
             } else {
-              // console.log("Num::", num, doubleLine);
               if (aspectRatio === "1:1" || aspectRatio === "8:9") {
-                const markerIdX = createArrowheadMarker(svg, line2color);
                 svg
                   .append("path")
                   .attr(
@@ -546,7 +553,6 @@
                   .attr("stroke-width", 2)
                   .attr("marker-end", `url(#${markerIdX})`);
               } else {
-                const markerIdX = createArrowheadMarker(svg, line2color);
                 svg
                   .append("path")
                   .attr(
@@ -562,28 +568,27 @@
               }
             }
           }
+
           var ratiocheck = aspectRatio === "1:1" || aspectRatio === "8:9";
           if (num === 1 && temp1 === 1) {
-            // Define the arrowhead marker
-            //top line arrow
             svg
               .append("path")
               .attr(
                 "d",
-                `M ${startX1},${ratiocheck ? startY1 : startY1 - 2} L ${
+                `M${startX1},${ratiocheck ? startY1 : startY1 - 2} L ${
                   ratiocheck ? endX1 + 6 : endX1
                 },${ratiocheck ? startY1 : startY1 - 2}`
               )
               .attr("fill", portColor)
               .attr("stroke", portColor)
               .attr("stroke-width", 2);
-            // sencond line in case 1
+
             if (doubleLine) {
               svg
                 .append("path")
                 .attr(
                   "d",
-                  `M ${startX1 + (ratiocheck ? 30 : 50)},${
+                  `M${startX1 + (ratiocheck ? 30 : 50)},${
                     ratiocheck ? startY1 + 5 : startY1 + 5
                   } L ${endX1},${ratiocheck ? startY1 + 5 : startY1 + 5}`
                 )
@@ -592,7 +597,50 @@
                 .attr("stroke-width", 2);
             }
           }
+
+          // Add vertical line that decreases
+          svg
+            .append("path")
+            .attr(
+              "d",
+              `M${startX},${startY - 1} V${startY - verticalLength + 10}`
+            )
+            .attr("stroke", portColor)
+            .attr("stroke-width", 2);
+          // curve
+          svg
+            .append("path")
+            .attr(
+              "d",
+              `M${startX},${startY - verticalLength + 14} Q${startX - 4},${
+                startY - verticalLength - 0
+              } ${startX + 30},${startY - verticalLength + 3}`
+            )
+            .attr("fill", "none")
+            .attr("stroke", portColor)
+            .attr("stroke-width", 2);
+
+          // Curve between vertical and horizontal line
+
+          if (previousColor2 !== portColor) {
+            // Add the horizontal line spanning the entire row
+            svg
+              .append("path")
+              .attr(
+                "d",
+                `M${startX + 40},${startY - verticalLength + 3} Q${
+                  startX + 5
+                },${startY - verticalLength + 5},${startX + 35},${
+                  startY - verticalLength + 3
+                } H${endX + cabinetWidth * wide}`
+              )
+              .attr("stroke", portColor)
+              .attr("stroke-width", 2);
+          } else {
+          }
+          previousColor2 = portColor;
         }
+
         function findLargestMultiple(number, limit) {
           // Calculate the largest multiple
           let largestMultiple = Math.floor(limit / number) * number;
