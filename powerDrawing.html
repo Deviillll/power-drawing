@@ -10,6 +10,11 @@
         background-color: white;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
+      #svg-box-container {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+      }
 
       #diagramDisplayArea {
         min-height: 200px;
@@ -32,6 +37,7 @@
   <body>
     <div>
       <div id="diagramDisplayArea"></div>
+      <div id="svg-box-container"></div>
       <div
         id="all-metrics"
         style="
@@ -45,6 +51,58 @@
       ></div>
     </div>
     <script>
+      let boxCounter = 0; // Global counter to manage vertical position of boxes
+
+      function createSVGBoxAtCoordinates(svgContainer, x, y, color, text) {
+        const boxWidth = 30;
+        const boxHeight = 20;
+        const lineLength = 60; // Length of the horizontal line
+
+        // Create an SVG element
+        const svg = d3
+          .select(svgContainer)
+          .append("svg")
+          .attr("width", boxWidth + lineLength + 100) // Adjust width to fit line, box, and text
+          .attr("height", boxHeight + 10) // Extra height for padding
+          .style("position", "absolute")
+          .style("left", `${x}px`)
+          .style("top", `${y + boxCounter * 27}px`);
+
+        // Draw the horizontal line
+        svg
+          .append("line")
+          .attr("x1", 0)
+          .attr("y1", boxHeight / 2 + 4)
+          .attr("x2", lineLength)
+          .attr("y2", boxHeight / 2 + 5)
+          .attr("stroke", color)
+          .attr("stroke-width", 4);
+
+        // Create the SVG box (rectangle)
+        svg
+          .append("rect")
+          .attr("x", lineLength)
+          .attr("y", 5)
+          .attr("width", boxWidth)
+          .attr("height", boxHeight)
+          .attr("fill", color) // Fill the rectangle with the specified color
+          .attr("stroke", color)
+          .attr("stroke-width", 2);
+
+        // Add text next to the rectangle
+        svg
+          .append("text")
+          .attr("x", lineLength + boxWidth + 15)
+          .attr("y", boxHeight / 2 + 5)
+          .attr("dy", ".35em")
+          .attr("text-anchor", "start")
+          .text(text)
+          .attr("fill", color)
+          .attr("font-size", "12px");
+
+        boxCounter++; // Increment counter for the next box
+      }
+
       function generateMetricsBox(id, color) {
         const metricsContainer = document.createElement("div");
         metricsContainer.id = id;
@@ -751,6 +809,7 @@
               }
               // drawCabinet(x,y,portColor,rect,curve,line,line2color);
             }
+            const svgContainer = document.getElementById("svg-box-container");
             // Loop through each cabinet
             for (let y = startY; y > endY; y += stepY) {
               //let portIndex = x%
@@ -929,6 +988,7 @@
                   //  horizontal movement across the entire row
 
                   if (previousColor !== line2color) {
+                    const horizontalLineLength = cabinetWidth * wide - x * 100; // Adjust the decrement factor as needed
                     svg
                       .append("path")
                       .attr(
@@ -936,14 +996,13 @@
                         `M${!ratiocheck2 ? lineX : lineX},${
                           lineY1 - verticalLength
                         } Q${controlX1},${controlY1 + 10} ${
-                          lineX + cabinetWidth * wide
+                          lineX + horizontalLineLength
                         },${lineY1 - verticalLength}`
                       )
                       .attr("stroke", isDotted ? "#000000" : line2color)
                       .attr("stroke-width", 2)
                       .attr("stroke-dasharray", isDotted ? "4, 4" : "");
 
-                    // Right line or arrow with curve
                     if (doubleLine) {
                       svg
                         .append("path")
@@ -959,6 +1018,17 @@
                         .attr("stroke-width", 2)
                         .attr("stroke-dasharray", isDotted ? "4, 4" : "");
                     }
+
+                    // Calling createSVGBoxAtCoordinates function to generate the SVG box at the end of the horizontal line
+                    const boxX = cabinetWidth * wide + tall * 40;
+                    const boxY = cabinetWidth - 447; // Call createSVGBoxAtCoordinates function
+                    createSVGBoxAtCoordinates(
+                      svgContainer,
+                      boxX,
+                      boxY,
+                      line2color,
+                      "20A Feed"
+                    );
                   } else {
                     svg
                       .append("path")
@@ -1060,7 +1130,7 @@
         }
         generateMetrics();
       }
-      generateDiagram(10, 5, 4, "1:1", false);
+      generateDiagram(5, 8, 4, "1:1", false);
     </script>
   </body>
 </html>
