@@ -38,11 +38,13 @@
       .diagonal-line {
         position: absolute;
         background-color: black;
-        width: 100%;
+        box-shadow: #f5f5f5 0px 0px 0px 3px, #f5f5f5 0px 0px 0px 5px;
+
+        width: 90%;
         height: 100%;
-        top: 0;
-        right: 0; /* Position the line at the top-right corner */
-        transform: rotate(-45deg); /* Rotate the line to the desired angle */
+        top: 42px;
+        left: 0; /* Position the line at the top-right corner */
+        transform: translate(-50%, -50%) rotate(45deg);
         transform-origin: 0 0; /* Set the rotation origin to the top-right corner */
       }
 
@@ -85,20 +87,20 @@
       }
       .vertical-btm-arrow {
         position: absolute;
-        bottom: -10px;
+        bottom: -8px;
         left: -8px;
         font-size: 40px;
       }
       .hori-lft-arrow {
         position: absolute;
-        top: -25px;
-        left: -12px;
+        top: -24px;
+        left: -8px;
         font-size: 40px;
       }
       .hori-rht-arrow {
         position: absolute;
-        top: -25px;
-        right: -12px;
+        top: -24px;
+        right: -8px;
         font-size: 40px;
       }
       .dia-arrow-top {
@@ -170,22 +172,26 @@
         const verticalLine = document.getElementById("verticalLine");
         verticalLine.style.height = `${gridHeight}px`;
         verticalLine.style.width = `3px`;
-        verticalLine.style.left = `${gridContainer.offsetLeft - 2}px`;
+        verticalLine.style.left = `${gridContainer.offsetLeft}px`;
         verticalLine.style.top = `${gridContainer.offsetTop}px`;
 
         // Set horizontal line width and position
         const horizontalLine = document.getElementById("horizontalLine");
         horizontalLine.style.width = `${gridWidth}px`;
-        horizontalLine.style.height = `2px`;
+        horizontalLine.style.height = `3px`;
         horizontalLine.style.left = `${gridContainer.offsetLeft}px`;
         horizontalLine.style.top = `${gridContainer.offsetTop - 2}px`;
 
         // Set diagonal line width and position
         const diagonalLine = document.getElementById("diagonalLine");
-        diagonalLine.style.width = `${Math.sqrt(
-          gridWidth ** 2 + gridHeight ** 2
-        )}px`;
+        diagonalLine.style.width = `${
+          Math.sqrt(gridWidth ** 2 + gridHeight ** 2) - 50
+        }px`;
+        // center the diagonal line
+
         diagonalLine.style.height = `2px`;
+        diagonalLine.style.position = "absolute";
+
         diagonalLine.style.left = `${gridContainer.offsetLeft}px`;
         diagonalLine.style.top = `${gridContainer.offsetTop}px`;
         diagonalLine.style.transform = `rotate(${
